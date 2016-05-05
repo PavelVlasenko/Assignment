@@ -1,5 +1,8 @@
 package com.payment.system;
 
+import com.payment.system.payments.EmployeePayment;
+import com.payment.system.payments.LoyaltyPayment;
+import com.payment.system.payments.StandardPayment;
 import com.payment.system.processing.PaymentProcessing;
 
 import java.util.Scanner;
@@ -35,14 +38,19 @@ public class Menu {
 
         switch (menuSelection){
             case 1:
-                System.out.println("--Standard payment--");
-                paymentProcessing.setClientType(ClientType.STANDART);
+                System.out.println("--Process standard payment--");
+                paymentProcessing.setPaymentType(new StandardPayment());
+                displayCurrentPrice();
                 break;
             case 2:
                 System.out.println("--Process loyalty rewards payment--");
+                paymentProcessing.setPaymentType(new LoyaltyPayment());
+                displayCurrentPrice();
                 break;
             case 3:
                 System.out.println("--Process employee payment--");
+                paymentProcessing.setPaymentType(new EmployeePayment());
+                displayCurrentPrice();
                 break;
             case 4:
                 System.out.println("--View payments received--");
@@ -55,6 +63,20 @@ public class Menu {
                 System.out.println("Invalid selection! A number between 1 and 5 was expected.");
                 dispalayMainMenu();
         }
+    }
+
+    private void displayCurrentPrice()
+    {
+        System.out.println("==== Enter current price: ====");
+        Scanner scanInput = new Scanner(System.in);
+        if(scanInput.hasNextDouble())
+        {
+            double price = scanInput.nextDouble();
+            paymentProcessing.setCurrentPrice(price);
+            paymentProcessing.completePayment();
+
+        }
+
     }
 
 }
