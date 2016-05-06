@@ -7,8 +7,12 @@ public interface PaymentProcessing
 {
     void setPaymentType(Payment payment);
 
-    void setCurrentPrice(double price);
-
     void completePayment();
+
+    void saveSaleToStorage();
+
+    Payment getPayment();
+
+    void displayAllSales();
 
 }

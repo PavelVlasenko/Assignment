@@ -4,6 +4,7 @@ import com.payment.system.payments.EmployeePayment;
 import com.payment.system.payments.LoyaltyPayment;
 import com.payment.system.payments.StandardPayment;
 import com.payment.system.processing.PaymentProcessing;
+import com.payment.system.processing.PaymentProcessingService;
 
 import java.util.Scanner;
 
@@ -17,66 +18,70 @@ public class Menu {
             "4. View Payments Received\n" +
             "5. Exit";
 
-    private PaymentProcessing paymentProcessing;
+    private static boolean finished = false;
 
+    private PaymentProcessing paymentProcessing = new PaymentProcessingService();
 
-    public void dispalayMainMenu()
-    {
-        System.out.println(HEADER);
-        System.out.println(MAIN_MENU);
+    private void displayMenuSelection() {
 
-        Scanner scanInput = new Scanner(System.in);
-        if(scanInput.hasNextInt())
-        {
-            int answer = scanInput.nextInt();
-            processMenuSelection(answer);
+        while (!finished) {
+            System.out.println(HEADER);
+            System.out.println(MAIN_MENU);
+
+            Scanner scanInput = new Scanner(System.in);
+            int answer = 0;
+            if (scanInput.hasNextInt()) {
+                answer = scanInput.nextInt();
+            }
+            switch (answer) {
+                case 1:
+                    System.out.println("--Process standard payment--");
+                    paymentProcessing.setPaymentType(new StandardPayment());
+                    System.out.println("==== Enter current price: ====");
+                    processPayment();
+                    break;
+                case 2:
+                    System.out.println("--Process loyalty rewards payment--");
+                    paymentProcessing.setPaymentType(new LoyaltyPayment());
+                    System.out.println("==== Enter current price: ====");
+                    processPayment();
+                    break;
+                case 3:
+                    System.out.println("--Process employee payment--");
+                    paymentProcessing.setPaymentType(new EmployeePayment());
+                    System.out.println("==== Enter current price: ====");
+                    processPayment();
+                    break;
+                case 4:
+                    System.out.println("--View payments received--");
+                    paymentProcessing.displayAllSales();
+                    break;
+                case 5:
+                    System.out.println("--Payments complete.  Goodbye! --");
+                    finished = true;
+                    break;
+                default:
+                    System.out.println("Invalid selection! A number between 1 and 5 was expected.");
+                    break;
+            }
         }
-
     }
 
-    private void processMenuSelection(int menuSelection) {
-
-        switch (menuSelection){
-            case 1:
-                System.out.println("--Process standard payment--");
-                paymentProcessing.setPaymentType(new StandardPayment());
-                displayCurrentPrice();
-                break;
-            case 2:
-                System.out.println("--Process loyalty rewards payment--");
-                paymentProcessing.setPaymentType(new LoyaltyPayment());
-                displayCurrentPrice();
-                break;
-            case 3:
-                System.out.println("--Process employee payment--");
-                paymentProcessing.setPaymentType(new EmployeePayment());
-                displayCurrentPrice();
-                break;
-            case 4:
-                System.out.println("--View payments received--");
-                break;
-            case 5:
-                System.out.println("--Payments complete.  Goodbye! --");
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Invalid selection! A number between 1 and 5 was expected.");
-                dispalayMainMenu();
-        }
-    }
-
-    private void displayCurrentPrice()
+    private void processPayment()
     {
-        System.out.println("==== Enter current price: ====");
         Scanner scanInput = new Scanner(System.in);
         if(scanInput.hasNextDouble())
         {
             double price = scanInput.nextDouble();
-            paymentProcessing.setCurrentPrice(price);
+            paymentProcessing.getPayment().getSale().setCurrentPrice(price);
             paymentProcessing.completePayment();
-
+            paymentProcessing.saveSaleToStorage();
+            System.out.println("==== Total price(with discount): " + paymentProcessing.getPayment().getSale().getTotalPrice() + " =====");
         }
-
+        else
+        {
+            System.out.println("Enter a valid price");
+        }
     }
 
 }
