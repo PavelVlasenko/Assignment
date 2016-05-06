@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PaymentProcessingService implements PaymentProcessing
 {
-    private static final String SALES_INFO_TEMPLATE = "%-3d  %-7f       %-7f        %-7f";
+    private static final String SALES_INFO_TEMPLATE = "%-3d  %-7.1f            %-7.1f      %-7.1f";
 
     private PaymentStorage paymentStorage = PaymentStorage.getInstance();
 
@@ -38,19 +38,19 @@ public class PaymentProcessingService implements PaymentProcessing
 
     @Override
     public void displayAllSales() {
-        System.out.println("==== Standard client sales =====");
-        System.out.println("Number ===== Current price =====  Discount ==== Total price");
+        System.out.println("\n================== Standard client sales =========================");
+        System.out.println("N    Current price     Discount     Total price");
         List<Sale> standardSales = paymentStorage.getSales().get(PaymentType.STANDARD);
         displaySalesInfo(standardSales);
 
-        System.out.println("==== Loyalty client sales =====");
-        System.out.println("Number ===== Current price =====  Discount ==== Total price");
-        List<Sale> loyaltySales = paymentStorage.getSales().get(PaymentType.STANDARD);
+        System.out.println("\n================== Loyalty client sales =========================");
+        System.out.println("N    Current price     Discount     Total price");
+        List<Sale> loyaltySales = paymentStorage.getSales().get(PaymentType.LOYALTY);
         displaySalesInfo(loyaltySales);
 
-        System.out.println("==== Employee client sales =====");
-        System.out.println("Number ===== Current price =====  Discount ==== Total price");
-        List<Sale> employeeSales = paymentStorage.getSales().get(PaymentType.STANDARD);
+        System.out.println("\n================== Employee client sales =========================");
+        System.out.println("N    Current price     Discount     Total price");
+        List<Sale> employeeSales = paymentStorage.getSales().get(PaymentType.EMPLOYEE);
         displaySalesInfo(employeeSales);
     }
 
@@ -65,8 +65,8 @@ public class PaymentProcessingService implements PaymentProcessing
             System.out.println(String.format(SALES_INFO_TEMPLATE, sales.indexOf(sale), sale.getCurrentPrice(), sale.getDiscount(), sale.getTotalPrice()));
         }
 
-        System.out.println("==== Total discount: " + totalDiscount);
-        System.out.println("==== Total sales amount: " + totalSalesAmount);
+        System.out.println("Total discount: " + totalDiscount);
+        System.out.println("Total sales amount: " + totalSalesAmount);
     }
 
 }

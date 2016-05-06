@@ -21,11 +21,6 @@ public class PaymentStorage
         sales.put(PaymentType.EMPLOYEE, new ArrayList<Sale>());
     }
 
-    public void displayAllSales()
-    {
-
-    }
-
     public Map<PaymentType, List<Sale>> getSales() {
         return sales;
     }

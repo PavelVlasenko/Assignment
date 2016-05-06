@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private static final String HEADER = "Payment System\n==========================";
+    private static final String HEADER = "=========================\n       Payment System\n==========================";
     private static final String MAIN_MENU = "Select an option from the menu below:\n" +
             "1. Standard Payment\n" +
             "2. Loyalty Rewards Payment\n" +
@@ -22,7 +22,7 @@ public class Menu {
 
     private PaymentProcessing paymentProcessing = new PaymentProcessingService();
 
-    private void displayMenuSelection() {
+    public void displayMainMenu() {
 
         while (!finished) {
             System.out.println(HEADER);
@@ -35,29 +35,29 @@ public class Menu {
             }
             switch (answer) {
                 case 1:
-                    System.out.println("--Process standard payment--");
+                    System.out.println("==== Process standard payment ====");
                     paymentProcessing.setPaymentType(new StandardPayment());
-                    System.out.println("==== Enter current price: ====");
+                    System.out.println("Enter current price: ");
                     processPayment();
                     break;
                 case 2:
-                    System.out.println("--Process loyalty rewards payment--");
+                    System.out.println("==== Process loyalty rewards payment ====");
                     paymentProcessing.setPaymentType(new LoyaltyPayment());
-                    System.out.println("==== Enter current price: ====");
+                    System.out.println("Enter current price:");
                     processPayment();
                     break;
                 case 3:
-                    System.out.println("--Process employee payment--");
+                    System.out.println("==== Process employee payment ====");
                     paymentProcessing.setPaymentType(new EmployeePayment());
-                    System.out.println("==== Enter current price: ====");
+                    System.out.println("Enter current price: ");
                     processPayment();
                     break;
                 case 4:
-                    System.out.println("--View payments received--");
+                    System.out.println("==== View payments received ====");
                     paymentProcessing.displayAllSales();
                     break;
                 case 5:
-                    System.out.println("--Payments complete.  Goodbye! --");
+                    System.out.println("==== Payments complete.  Goodbye! ====");
                     finished = true;
                     break;
                 default:
